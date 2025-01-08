@@ -1,0 +1,12 @@
+# give a name for the builder phase as builder
+FROM node:16-alpine as builder
+WORKDIR '/app'
+COPY package.json .
+RUN npm install 
+COPY . .
+RUN npm run build
+# Note: /app/build has all the files we want 
+
+# RUN Phase
+FROM nginx
+COPY --from=builder /app/build /usr/share/nginx/html
